@@ -2,17 +2,17 @@
 
 namespace App\Providers;
 
+use Laravel\Fortify\Fortify;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Cache\RateLimiting\Limit;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
-use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -29,6 +29,28 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+           // ビューの設定
+    Fortify::loginView(function () {
+        // URLで一般ユーザーと管理者を判定
+        if (request()->is('admin/login')) {
+            return view('admin.auth.login');
+        }
+        return view('auth.login');
+    });
+
+    Fortify::registerView(function () {
+        return view('auth.register');
+    });
+
+    Fortify::requestPasswordResetLinkView(function () {
+        return view('auth.forgot-password');
+    });
+
+    Fortify::resetPasswordView(function ($request) {
+        return view('auth.reset-password', ['request' => $request]);
+    });
+
+
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
