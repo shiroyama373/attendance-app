@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -41,5 +42,30 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_admin' => 'boolean',
     ];
+
+        /**
+     * リレーション: ユーザーは複数の勤怠記録を持つ
+     */
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    /**
+     * リレーション: ユーザーは複数の修正申請を作成できる
+     */
+    public function stampCorrectionRequests()
+    {
+        return $this->hasMany(StampCorrectionRequest::class, 'user_id');
+    }
+
+    /**
+     * リレーション: 管理者として複数の申請を承認できる
+     */
+    public function approvedRequests()
+    {
+        return $this->hasMany(StampCorrectionRequest::class, 'approved_by');
+    }
 }
