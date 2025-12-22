@@ -8,7 +8,7 @@
 <div class="auth-container">
     <h2 class="auth-title">ログイン</h2>
 
-    <form action="{{ route('login') }}" method="POST">
+    <form action="{{ route('login') }}" method="POST" novalidate>
         @csrf
 
         <div class="form-group">
@@ -27,11 +27,11 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn-primary">ログイン</button>
+        <button type="submit" class="btn-primary">ログインする</button>
     </form>
 
     <p class="auth-link">
-        会員登録は<a href="{{ route('register') }}">こちら</a>
+        <a href="{{ route('register') }}">会員登録はこちら</a>
     </p>
 </div>
 @endsection
