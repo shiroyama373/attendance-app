@@ -3,7 +3,7 @@
 @section('title', '申請承認 - 管理者')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/attendance.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin_stamp_request_show.css') }}">
 <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 
 <div class="approval-container">

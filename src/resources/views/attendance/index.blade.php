@@ -42,16 +42,16 @@
         @endif
 
         @if($attendance->status === 'clocked_in')
-            {{-- 休憩入・退勤ボタン --}}
-            <form action="{{ route('attendance.store') }}" method="POST">
-                @csrf
-                <input type="hidden" name="action" value="break_start">
-                <button type="submit" class="btn-clock btn-white">休憩入</button>
-            </form>
+            {{-- 退勤・休憩入ボタン --}}
             <form action="{{ route('attendance.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="action" value="clock_out">
                 <button type="submit" class="btn-clock">退勤</button>
+            </form>
+            <form action="{{ route('attendance.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="action" value="break_start">
+                <button type="submit" class="btn-clock btn-white">休憩入</button>
             </form>
         @endif
 
@@ -66,7 +66,7 @@
 
         @if($attendance->status === 'clocked_out')
             {{-- 退勤済み：メッセージ表示 --}}
-            <div style="grid-column: 1 / -1; font-size: 1.5rem; padding: 1.5rem; color: #000;">
+            <div style="grid-column: 1 / -1; font-size: 1.5rem; padding: 1.5rem; color: #000;  font-weight: bold;">
                 お疲れ様でした
             </div>
 @endif
@@ -79,9 +79,10 @@ function updateTime() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds}`;
+
+    document.getElementById('current-time').textContent = `${hours}:${minutes}`;
 }
 setInterval(updateTime, 1000);
+updateTime(); // ← ページ読み込み直後にも表示させる
 </script>
 @endsection
