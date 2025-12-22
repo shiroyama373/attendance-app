@@ -1,0 +1,39 @@
+/* 申請承認ページ */
+.approval-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.current-data-row {
+    background-color: #f9f9f9;
+}
+
+.requested-data-row {
+    background-color: #fff3cd;
+}
+
+.detail-sub-info {
+    margin-top: 0.5rem;
+}
+
+.status-pending {
+    color: #856404;
+}
+
+.status-approved {
+    color: #155724;
+}
+
+.status-rejected {
+    color: #721c24;
+}
+
+.approval-buttons {
+    margin-top: 2rem;
+    justify-content: center;
+}
+
+.back-link-container {
+    text-align: center;
+    margin-top: 1.5rem;
+}

@@ -1,0 +1,79 @@
+/* 申請一覧ページ */
+.request-section {
+    margin-bottom: 3rem;
+}
+
+.request-section-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.request-list {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.request-item {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.request-item:last-child {
+    border-bottom: none;
+}
+
+.request-item:hover {
+    background-color: #f9f9f9;
+}
+
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.request-date {
+    color: #666;
+    font-size: 0.875rem;
+}
+
+.request-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-approved {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.request-body {
+    color: #333;
+}
+
+.request-note {
+    color: #666;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+}

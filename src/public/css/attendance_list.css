@@ -1,0 +1,151 @@
+/* 勤怠一覧ページ */
+.page-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.month-navigation {
+    background: white;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.nav-button {
+    color: #999;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.nav-button:hover {
+    color: #666;
+}
+
+.current-month {
+    color: #000;
+    font-weight: bold;
+    font-size: 1.125rem;
+}
+
+.current-month::before {
+    content: "📅 ";
+}
+
+.attendance-table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table thead th {
+    padding: 1rem;
+    text-align: center;
+    color: #999;
+    font-weight: normal;
+    border-bottom: 1px solid #eee;
+}
+
+.attendance-table tbody td {
+    padding: 1rem;
+    text-align: center;
+    color: #999;
+    border-bottom: 1px solid #eee;
+}
+
+.attendance-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.detail-link {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.detail-link:hover {
+    text-decoration: underline;
+}/* 勤怠一覧ページ */
+.page-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.month-navigation {
+    background: white;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.nav-button {
+    color: #999;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.nav-button:hover {
+    color: #666;
+}
+
+.current-month {
+    color: #000;
+    font-weight: bold;
+    font-size: 1.125rem;
+}
+
+.current-month::before {
+    content: "📅 ";
+}
+
+.attendance-table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table thead th {
+    padding: 1rem;
+    text-align: center;
+    color: #999;
+    font-weight: normal;
+    border-bottom: 1px solid #eee;
+}
+
+.attendance-table tbody td {
+    padding: 1rem;
+    text-align: center;
+    color: #999;
+    border-bottom: 1px solid #eee;
+}
+
+.attendance-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.detail-link {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.detail-link:hover {
+    text-decoration: underline;
+}
