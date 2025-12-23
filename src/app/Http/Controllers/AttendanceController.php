@@ -13,26 +13,24 @@ class AttendanceController extends Controller
      * 出勤登録画面を表示
      */
     public function index()
-    {
-        $user = auth()->user();
-        $today = Carbon::today()->toDateString();
-        
-        // 今日の勤怠記録を取得
-        $attendance = Attendance::where('user_id', $user->id)
-            ->where('work_date', $today)
-            ->first();
-        
-        // 勤怠記録がない場合は新規作成
-        if (!$attendance) {
-            $attendance = new Attendance([
-                'user_id' => $user->id,
-                'work_date' => $today,
-                'status' => 'not_started',
-            ]);
-        }
-        
-        return view('attendance.index', compact('attendance'));
+{
+    $attendance = Attendance::firstOrCreate(
+        [
+            'user_id' => auth()->id(),
+            'work_date' => now()->toDateString(),
+        ],
+        ['status' => 'not_started']
+    );
+
+    // 退勤済みの場合、セッションにフラグを設定
+    if ($attendance->status === 'clocked_out') {
+        session(['is_clocked_out' => true]);
+    } else {
+        session()->forget('is_clocked_out');
     }
+
+    return view('attendance.index', compact('attendance'));
+}
 
     /**
      * 打刻処理（出勤・休憩入・休憩戻・退勤）

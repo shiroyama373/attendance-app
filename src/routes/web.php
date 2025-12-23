@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StampCorrectionRequestController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
@@ -17,6 +18,14 @@ use App\Http\Controllers\Admin\StampCorrectionRequestController as AdminStampCor
 // GET/POST /register - 会員登録
 // GET/POST /login - ログイン
 // POST /logout - ログアウト
+
+// ログアウト（Fortifyを上書き）
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/login');
+})->middleware('auth')->name('logout');
 
 /*
 |--------------------------------------------------------------------------

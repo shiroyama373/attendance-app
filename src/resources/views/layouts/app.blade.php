@@ -9,11 +9,21 @@
 <body>
     <header class="header">
         <h1>COACHTECH</h1>
+
         @auth
         <nav>
-            <a href="{{ route('attendance.index') }}">勤怠</a>
-            <a href="{{ route('attendance.list') }}">勤怠一覧</a>
-            <a href="{{ route('stamp_correction_request.index') }}">申請</a>
+            @if(request()->is('attendance') && session('is_clocked_out'))
+                {{-- 退勤後のナビゲーション --}}
+                <a href="{{ route('attendance.list') }}">今月の出勤一覧</a>
+                <a href="{{ route('stamp_correction_request.index') }}">申請一覧</a>
+            @else
+                {{-- 通常のナビゲーション --}}
+                <a href="{{ route('attendance.index') }}">勤怠</a>
+                <a href="{{ route('attendance.list') }}">勤怠一覧</a>
+                <a href="{{ route('stamp_correction_request.index') }}">申請</a>
+            @endif
+            
+            {{-- ログアウトは共通 --}}
             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                 @csrf
                 <button type="submit">ログアウト</button>
@@ -23,7 +33,6 @@
     </header>
 
     <main class="container">
-
         @if(session('error'))
             <div class="alert alert-error">
                 {{ session('error') }}

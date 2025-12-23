@@ -2,6 +2,7 @@
 
 @section('title', '出勤登録')
 
+
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/attendance_index.css') }}">
 
