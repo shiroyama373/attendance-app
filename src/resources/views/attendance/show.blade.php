@@ -3,13 +3,15 @@
 @section('title', '勤怠詳細')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/attendance.css') }}">
+<link rel="stylesheet" href="{{ asset('css/attendance_show.css') }}">
 
-<div style="max-width: 600px; margin: 0 auto;">
-    <h2 class="page-title">勤怠詳細</h2>
+<div class="attendance-wrapper">
+    <h2 class="page-title">
+        <span class="title-bar"></span>勤怠詳細
+    </h2>
 
     <div class="detail-box">
-        <form action="{{ route('attendance.storeCorrectionRequest', $attendance->id) }}" method="POST">
+        <form id="correction-form" action="{{ route('attendance.storeCorrectionRequest', $attendance->id) }}" method="POST">
             @csrf
             <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
 
@@ -22,7 +24,9 @@
             {{-- 日付 --}}
             <div class="detail-row">
                 <div class="detail-label">日付</div>
-                <div class="detail-value">{{ $attendance->work_date->format('Y年m月d日') }}</div>
+                <div class="detail-value">
+                    {{ $attendance->work_date->format('Y年m月d日') }}
+                </div>
             </div>
 
             {{-- 出勤・退勤 --}}
@@ -30,70 +34,96 @@
                 <div class="detail-label">出勤・退勤</div>
                 <div class="detail-value">
                     <div class="time-range">
-                        <input type="time" name="clock_in" 
-                               value="{{ old('clock_in', $attendance->clock_in ? $attendance->clock_in->format('H:i') : '') }}" 
-                               class="time-box" style="border: 1px solid #ddd;">
-                        <span>〜</span>
-                        <input type="time" name="clock_out" 
-                               value="{{ old('clock_out', $attendance->clock_out ? $attendance->clock_out->format('H:i') : '') }}" 
-                               class="time-box" style="border: 1px solid #ddd;">
+                        <input type="text"
+       name="clock_in"
+       value="{{ old('clock_in', $attendance->clock_in ? $attendance->clock_in->format('H:i') : '') }}"
+       class="time-box"
+       placeholder="">
+
+<span>〜</span>
+
+<input type="text"
+       name="clock_out"
+       value="{{ old('clock_out', $attendance->clock_out ? $attendance->clock_out->format('H:i') : '') }}"
+       class="time-box"
+       placeholder="">
                     </div>
-                    @error('clock_out')
-                        <p class="error-message">{{ $message }}</p>
-                    @enderror
+                    @error('clock_in')
+    <p class="error-message">{{ $message }}</p>
+@enderror
+@error('clock_out')
+    <p class="error-message">{{ $message }}</p>
+@enderror
                 </div>
             </div>
 
             {{-- 休憩 --}}
-            <div class="detail-row">
-                <div class="detail-label">休憩</div>
-                <div class="detail-value">
-                    @forelse($attendance->breaks as $index => $break)
-                    <div class="break-item">
-                        @if($index > 0)
-                            <span style="color: #999; font-size: 0.875rem;">休憩{{ $index + 1 }}</span>
-                        @endif
+            @php
+                $breaks = $attendance->breaks ?? collect();
+                $maxBreaks = max($breaks->count(), 2);
+            @endphp
+
+            @for($i = 0; $i < $maxBreaks; $i++)
+                @php
+                    $break = $breaks[$i] ?? null;
+                @endphp
+
+                <div class="detail-row">
+                    <div class="detail-label">
+                        {{ $i === 0 ? '休憩' : '休憩' . ($i + 1) }}
+                    </div>
+
+                    <div class="detail-value">
                         <div class="time-range">
-                            <input type="time" name="breaks_data[{{ $index }}][break_start]" 
-                                   value="{{ old('breaks_data.'.$index.'.break_start', $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '') }}" 
-                                   class="time-box" style="border: 1px solid #ddd;">
-                            <span>〜</span>
-                            <input type="time" name="breaks_data[{{ $index }}][break_end]" 
-                                   value="{{ old('breaks_data.'.$index.'.break_end', $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '') }}" 
-                                   class="time-box" style="border: 1px solid #ddd;">
+                            <input type="text"
+       name="breaks_data[{{ $i }}][break_start]"
+       value="{{ old(
+           'breaks_data.'.$i.'.break_start',
+           $break && $break->break_start
+               ? \Carbon\Carbon::parse($break->break_start)->format('H:i')
+               : ''
+       ) }}"
+       class="time-box">
+
+<span>〜</span>
+
+<input type="text"
+       name="breaks_data[{{ $i }}][break_end]"
+       value="{{ old(
+           'breaks_data.'.$i.'.break_end',
+           $break && $break->break_end
+               ? \Carbon\Carbon::parse($break->break_end)->format('H:i')
+               : ''
+       ) }}"
+       class="time-box">
                         </div>
+@error('breaks_data.'.$i.'.break_start')
+    <p class="error-message">{{ $message }}</p>
+@enderror
+@error('breaks_data.'.$i.'.break_end')
+    <p class="error-message">{{ $message }}</p>
+@enderror
                     </div>
-                    @empty
-                    <div class="time-range">
-                        <input type="time" name="breaks_data[0][break_start]" class="time-box" style="border: 1px solid #ddd;">
-                        <span>〜</span>
-                        <input type="time" name="breaks_data[0][break_end]" class="time-box" style="border: 1px solid #ddd;">
-                    </div>
-                    @endforelse
-                    @error('breaks_data')
-                        <p class="error-message">{{ $message }}</p>
-                    @enderror
                 </div>
-            </div>
+            @endfor
 
             {{-- 備考 --}}
             <div class="detail-row">
-                <div class="detail-label">備考 <span style="color: red;">*必須</span></div>
+                <div class="detail-label">備考</div>
                 <div class="detail-value">
-                    <textarea name="note" rows="4" class="note-box" style="width: 100%; border: 1px solid #ddd;">{{ old('note', $attendance->note) }}</textarea>
+                    <textarea name="note" class="note-box">{{ old('note', $attendance->note) }}</textarea>
                     @error('note')
-                        <p class="error-message">{{ $message }}</p>
-                    @enderror
+            <p class="error-message">{{ $message }}</p>
+        @enderror
+
                 </div>
             </div>
-
-            {{-- 修正申請ボタン --}}
-            <button type="submit" class="btn-edit" style="margin-top: 1.5rem;">修正申請を送信</button>
         </form>
     </div>
 
-    <div style="text-align: center; margin-top: 1.5rem;">
-        <a href="{{ route('attendance.list') }}" style="color: #0066cc; text-decoration: none;">勤怠一覧に戻る</a>
+    {{-- 修正ボタン --}}
+    <div class="btn-container">
+        <button type="submit" form="correction-form" class="btn-edit">修正</button>
     </div>
 </div>
 @endsection
