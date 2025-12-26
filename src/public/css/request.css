@@ -1,79 +1,107 @@
 /* 申請一覧ページ */
-.request-section {
+.request-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* タイトル */
+.page-title {
+    font-size: 2rem;
+    margin-top: 5rem;
     margin-bottom: 3rem;
+    color: #000;
 }
 
-.request-section-title {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-    color: #333;
+.title-bar {
+    display: inline-block;
+    width: 6px;
+    height: 1.8rem;
+    background-color: #000;
+    margin-right: 0.8rem;
+    vertical-align: middle;
 }
 
-.request-list {
+/* タブ */
+.tabs {
+    display: flex;
+    gap: 2rem;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 2rem;
+}
+
+.tab {
+    background: none;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    color: #999;
+}
+
+.tab.active {
+    color: #000;
+    font-weight: bold;
+    border-bottom: 3px solid #000;
+}
+
+/* タブコンテンツ */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* テーブル */
+.table-container {
     background: white;
-    border-radius: 12px;
+    border-radius: 8px;
     overflow: hidden;
 }
 
-.request-item {
-    padding: 1.5rem;
-    border-bottom: 1px solid #eee;
+.request-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.request-item:last-child {
-    border-bottom: none;
+.request-table thead th {
+    padding: 1rem;
+    text-align: center;
+    color: #666;
+    font-weight: bold; 
+    font-size: 1.125rem;
+
+    border-bottom: 3px solid #ddd;
 }
 
-.request-item:hover {
+.request-table tbody td {
+    padding: 1.5rem 1rem;
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.125rem;
+    border-bottom: 1.5px solid #ddd;
+}
+
+.request-table tbody tr:hover {
     background-color: #f9f9f9;
 }
 
-.request-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+.detail-link {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-.request-date {
-    color: #666;
-    font-size: 0.875rem;
-}
-
-.request-status {
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    font-size: 0.875rem;
-}
-
-.status-pending {
-    background-color: #fff3cd;
-    color: #856404;
-}
-
-.status-approved {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-.status-rejected {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-.request-body {
-    color: #333;
-}
-
-.request-note {
-    color: #666;
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
-    font-style: italic;
+.detail-link:hover {
+    text-decoration: underline;
 }
 
 .empty-message {
     text-align: center;
-    padding: 3rem;
     color: #999;
+    padding: 3rem;
 }

@@ -3,28 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminAttendanceUpdateRequest;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
 use Carbon\Carbon;
-use App\Http\Requests\AdminAttendanceUpdateRequest;
 
 class AttendanceController extends Controller
 {
     /**
-     * 全スタッフの勤怠一覧を表示（日別）
+     * 勤怠一覧を表示（日別）
      */
     public function index(Request $request)
     {
-        // 日付をリクエストから取得（デフォルトは今日）
         $date = $request->input('date', Carbon::today()->toDateString());
         
         // その日の全スタッフの勤怠記録を取得
-        $attendances = Attendance::where('work_date', $date)
-            ->with('user')
-            ->orderBy('user_id')
+        $attendances = Attendance::with(['user', 'breaks'])
+            ->whereDate('work_date', $date)
             ->get();
         
-        // 前日・翌日の計算
+        // 前日・翌日
         $prevDate = Carbon::parse($date)->subDay()->toDateString();
         $nextDate = Carbon::parse($date)->addDay()->toDateString();
         
@@ -32,7 +30,7 @@ class AttendanceController extends Controller
     }
 
     /**
-     * 勤怠詳細を表示・修正
+     * 勤怠詳細を表示
      */
     public function show($id)
     {
@@ -40,7 +38,7 @@ class AttendanceController extends Controller
         
         return view('admin.attendance.show', compact('attendance'));
     }
-    
+
     /**
      * 勤怠データを更新
      */
@@ -52,6 +50,7 @@ class AttendanceController extends Controller
         $attendance->update([
             'clock_in' => $request->clock_in ? Carbon::createFromFormat('H:i', $request->clock_in) : null,
             'clock_out' => $request->clock_out ? Carbon::createFromFormat('H:i', $request->clock_out) : null,
+            'note' => $request->note,
         ]);
         
         // 既存の休憩データを削除
@@ -60,6 +59,11 @@ class AttendanceController extends Controller
         // 新しい休憩データを作成
         if ($request->breaks_data) {
             foreach ($request->breaks_data as $break) {
+                // 空の休憩データはスキップ
+                if (empty($break['break_start']) && empty($break['break_end'])) {
+                    continue;
+                }
+                
                 $attendance->breaks()->create([
                     'break_start' => $break['break_start'] ?? null,
                     'break_end' => $break['break_end'] ?? null,
@@ -76,34 +80,7 @@ class AttendanceController extends Controller
      */
     public function showByStaff(Request $request, $id)
     {
-        // 対象スタッフを取得
-        $user = \App\Models\User::findOrFail($id);
-        
-        // 年月をリクエストから取得（デフォルトは今月）
-        $year = $request->input('year', Carbon::now()->year);
-        $month = $request->input('month', Carbon::now()->month);
-        
-        // 月初と月末を計算
-        $startOfMonth = Carbon::create($year, $month, 1)->toDateString();
-        $endOfMonth = Carbon::create($year, $month, 1)->endOfMonth()->toDateString();
-        
-        // そのスタッフの月別勤怠記録を取得
-        $attendances = Attendance::where('user_id', $id)
-            ->whereBetween('work_date', [$startOfMonth, $endOfMonth])
-            ->orderBy('work_date', 'desc')
-            ->get();
-        
-        // 前月・翌月の計算
-        $prevMonth = Carbon::create($year, $month, 1)->subMonth();
-        $nextMonth = Carbon::create($year, $month, 1)->addMonth();
-        
-        return view('admin.attendance.show_by_staff', compact(
-            'user',
-            'attendances',
-            'year',
-            'month',
-            'prevMonth',
-            'nextMonth'
-        ));
+        // TODO: 実装予定
+        return view('admin.attendance.show-by-staff');
     }
 }

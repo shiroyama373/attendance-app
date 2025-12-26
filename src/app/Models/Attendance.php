@@ -57,4 +57,14 @@ class Attendance extends Model
     {
         return $this->hasMany(StampCorrectionRequest::class);
     }
+
+    /**
+     * 承認待ちの修正申請があるかチェック
+     */
+    public function hasPendingRequest()
+    {
+        return $this->stampCorrectionRequests()
+            ->where('status', 'pending')
+            ->exists();
+    }
 }

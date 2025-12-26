@@ -5,82 +5,104 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/request.css') }}">
 
-<div style="max-width: 1000px; margin: 0 auto;">
-    <h2 class="page-title">申請一覧</h2>
+<div class="request-wrapper">
+    <h2 class="page-title">
+        <span class="title-bar"></span>申請一覧
+    </h2>
+
+    {{-- タブ --}}
+    <div class="tabs">
+        <button class="tab active" data-tab="pending">承認待ち</button>
+        <button class="tab" data-tab="approved">承認済み</button>
+    </div>
 
     {{-- 承認待ち --}}
-    <div class="request-section">
-        <h3 class="request-section-title">承認待ち</h3>
-        <div class="request-list">
-            @forelse($pendingRequests as $request)
-            <div class="request-item">
-                <div class="request-header">
-                    <div>
-                        @if(auth()->user()->is_admin)
-                            <strong>{{ $request->user->name }}</strong> - 
-                        @endif
-                        <span class="request-date">{{ $request->attendance->work_date->format('Y年m月d日') }}</span>
-                    </div>
-                    <span class="request-status status-pending">承認待ち</span>
-                </div>
-                <div class="request-body">
-                    <div>
-                        出勤: {{ $request->clock_in ? $request->clock_in->format('H:i') : '-' }} / 
-                        退勤: {{ $request->clock_out ? $request->clock_out->format('H:i') : '-' }}
-                    </div>
-                    @if($request->note)
-                        <div class="request-note">備考: {{ Str::limit($request->note, 50) }}</div>
-                    @endif
-                </div>
-                @if(auth()->user()->is_admin)
-                    <div style="margin-top: 1rem;">
-                        <a href="{{ route('admin.stamp_correction_request.show', $request->id) }}" 
-                           style="color: #0066cc; text-decoration: none;">詳細を見る</a>
-                    </div>
-                @endif
-            </div>
-            @empty
-            <div class="empty-message">承認待ちの申請はありません</div>
-            @endforelse
+    <div class="tab-content active" id="pending">
+        <div class="table-container">
+            <table class="request-table">
+                <thead>
+                    <tr>
+                        <th>状態</th>
+                        <th>名前</th>
+                        <th>対象日時</th>
+                        <th>申請理由</th>
+                        <th>申請日時</th>
+                        <th>詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($pendingRequests as $request)
+                    <tr>
+                        <td>承認待ち</td>
+                        <td>{{ $request->user->name }}</td>
+                        <td>{{ $request->attendance->work_date->format('Y/m/d') }}</td>
+                        <td>{{ Str::limit($request->note, 20) }}</td>
+                        <td>{{ $request->created_at->format('Y/m/d') }}</td>
+                        <td>
+                            <a href="{{ route('attendance.show', $request->attendance_id) }}" class="detail-link">詳細</a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="empty-message">承認待ちの申請はありません</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 
-    {{-- 処理済み --}}
-    <div class="request-section">
-        <h3 class="request-section-title">処理済み</h3>
-        <div class="request-list">
-            @forelse($processedRequests as $request)
-            <div class="request-item">
-                <div class="request-header">
-                    <div>
-                        @if(auth()->user()->is_admin)
-                            <strong>{{ $request->user->name }}</strong> - 
-                        @endif
-                        <span class="request-date">{{ $request->attendance->work_date->format('Y年m月d日') }}</span>
-                    </div>
-                    <span class="request-status {{ $request->status === 'approved' ? 'status-approved' : 'status-rejected' }}">
-                        {{ $request->status === 'approved' ? '承認済み' : '却下' }}
-                    </span>
-                </div>
-                <div class="request-body">
-                    <div>
-                        出勤: {{ $request->clock_in ? $request->clock_in->format('H:i') : '-' }} / 
-                        退勤: {{ $request->clock_out ? $request->clock_out->format('H:i') : '-' }}
-                    </div>
-                    @if($request->note)
-                        <div class="request-note">備考: {{ Str::limit($request->note, 50) }}</div>
-                    @endif
-                    @if($request->approver)
-                        <div style="color: #999; font-size: 0.875rem; margin-top: 0.5rem;">
-                            承認者: {{ $request->approver->name }} ({{ $request->approved_at->format('Y/m/d H:i') }})
-                        </div>
-                    @endif
-                </div>
-            </div>
-            @empty
-            <div class="empty-message">処理済みの申請はありません</div>
-            @endforelse
+    {{-- 承認済み --}}
+    <div class="tab-content" id="approved">
+        <div class="table-container">
+            <table class="request-table">
+                <thead>
+                    <tr>
+                        <th>状態</th>
+                        <th>名前</th>
+                        <th>対象日時</th>
+                        <th>申請理由</th>
+                        <th>申請日時</th>
+                        <th>詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($processedRequests as $request)
+                    <tr>
+                        <td>{{ $request->status === 'approved' ? '承認済み' : '却下' }}</td>
+                        <td>{{ $request->user->name }}</td>
+                        <td>{{ $request->attendance->work_date->format('Y/m/d') }}</td>
+                        <td>{{ Str::limit($request->note, 20) }}</td>
+                        <td>{{ $request->created_at->format('Y/m/d') }}</td>
+                        <td>
+                            <a href="{{ route('attendance.show', $request->attendance_id) }}" class="detail-link">詳細</a>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="empty-message">承認済みの申請はありません</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+<script>
+// タブ切り替え
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        const targetTab = this.dataset.tab;
+        
+        // タブのアクティブ状態を切り替え
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        
+        // コンテンツの表示を切り替え
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(targetTab).classList.add('active');
+    });
+});
+</script>
 @endsection

@@ -73,7 +73,9 @@ return [
     |
     */
 
-    'home' => '/attendance',
+    'home' => function () {
+        return auth()->user()->is_admin ? '/admin/attendance/list' : '/attendance';
+    },
 
     /*
     |--------------------------------------------------------------------------

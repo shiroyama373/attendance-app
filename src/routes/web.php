@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StampCorrectionRequestController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
@@ -18,14 +19,21 @@ use App\Http\Controllers\Admin\StampCorrectionRequestController as AdminStampCor
 // GET/POST /register - 会員登録
 // GET/POST /login - ログイン
 // POST /logout - ログアウト
-
-// ログアウト（Fortifyを上書き）
-Route::post('/logout', function () {
-    Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
+// ルートURL（ログアウト後のリダイレクト先）
+Route::get('/', function () {
+    if (request()->cookie('was_admin')) {
+        Cookie::queue(Cookie::forget('was_admin'));
+        return redirect('/admin/login');
+    }
     return redirect('/login');
-})->middleware('auth')->name('logout');
+});
+
+// 管理者ログイン（Fortifyを使用）
+Route::get('/admin/login', function () {
+    return view('admin.auth.login');
+})->name('admin.login');
+
+Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
 
 /*
 |--------------------------------------------------------------------------
@@ -64,7 +72,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     
     // 勤怠詳細画面
     Route::get('/attendance/{id}', [AdminAttendanceController::class, 'show'])->name('admin.attendance.show');
-    
+    Route::put('/attendance/{id}', [AdminAttendanceController::class, 'update'])->name('admin.attendance.update');
     // スタッフ一覧画面
     Route::get('/staff/list', [StaffController::class, 'index'])->name('admin.staff.index');
     

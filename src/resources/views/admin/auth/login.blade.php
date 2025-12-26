@@ -8,7 +8,7 @@
 <div class="auth-container">
     <h2 class="auth-title">管理者ログイン</h2>
 
-    <form action="{{ route('login') }}" method="POST">
+    <form action="{{ route('admin.login') }}" method="POST">
         @csrf
 
         <div class="form-group">
@@ -27,7 +27,7 @@
             @enderror
         </div>
 
-        <button type="submit" class="btn-primary">ログイン</button>
+        <button type="submit" class="btn-primary">管理者ログインする</button>
     </form>
 </div>
 @endsection

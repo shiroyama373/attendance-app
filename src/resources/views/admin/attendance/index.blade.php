@@ -3,11 +3,12 @@
 @section('title', '勤怠一覧 - 管理者')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/attendance.css') }}">
-<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+<link rel="stylesheet" href="{{ asset('css/attendance_list.css') }}">
 
-<div style="max-width: 1200px; margin: 0 auto;">
-    <h2 class="page-title">勤怠一覧（日別）</h2>
+<div class="request-wrapper">
+    <h2 class="page-title">
+        <span class="title-bar"></span>{{ \Carbon\Carbon::parse($date)->format('Y年m月d日') }}の勤怠
+    </h2>
 
     {{-- 日付選択ナビゲーション --}}
     <div class="month-navigation">
@@ -21,16 +22,16 @@
     </div>
 
     {{-- 勤怠一覧テーブル --}}
-    <div class="admin-table-container">
-        <table class="admin-table">
+    <div class="attendance-table-container">
+        <table class="attendance-table">
             <thead>
                 <tr>
-                    <th>スタッフ名</th>
+                    <th>名前</th>
                     <th>出勤</th>
                     <th>退勤</th>
                     <th>休憩時間</th>
-                    <th>合計勤務時間</th>
-                    <th>操作</th>
+                    <th>合計</th>
+                    <th>詳細</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,13 +68,12 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('admin.attendance.show', $attendance->id) }}" class="action-link">詳細・修正</a>
-                        <a href="{{ route('admin.attendance.showByStaff', $attendance->user_id) }}" class="action-link">月別一覧</a>
+                        <a href="{{ route('admin.attendance.show', $attendance->id) }}" class="detail-link">詳細</a>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 2rem;">この日の勤怠データはありません</td>
+                    <td colspan="6" class="empty-message">この日の勤怠データはありません</td>
                 </tr>
                 @endforelse
             </tbody>

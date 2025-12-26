@@ -124,7 +124,11 @@
 
     {{-- 修正ボタン --}}
     <div class="btn-container">
-        <button type="submit" form="correction-form" class="btn-edit">修正</button>
+        @if($attendance->hasPendingRequest())
+            <p class="pending-message">*承認待ちのため修正はできません。</p>
+        @else
+            <button type="submit" form="correction-form" class="btn-edit">修正</button>
+        @endif
     </div>
 </div>
 @endsection

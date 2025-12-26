@@ -5,9 +5,10 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/attendance_list.css') }}">
 
-<div style="max-width: 1000px; margin: 0 auto;">
-    {{-- ページタイトル --}}
-    <h2 class="page-title">勤怠アプリ</h2>
+<div class="request-wrapper">
+    <h2 class="page-title">
+        <span class="title-bar"></span>勤怠一覧
+    </h2>
 
     {{-- 月選択ナビゲーション --}}
     <div class="month-navigation">
@@ -28,7 +29,7 @@
                     <th>日付</th>
                     <th>出勤</th>
                     <th>退勤</th>
-                    <th>休憩</th>
+                    <th>休憩時間</th>
                     <th>合計</th>
                     <th>詳細</th>
                 </tr>
@@ -36,7 +37,7 @@
             <tbody>
                 @forelse($attendances as $attendance)
                 <tr>
-                    <td>{{ $attendance->work_date->format('Y-m-d') }}</td>
+                    <td>{{ $attendance->work_date->format('m/d') }}</td>
                     <td>{{ $attendance->clock_in ? $attendance->clock_in->format('H:i') : '-' }}</td>
                     <td>{{ $attendance->clock_out ? $attendance->clock_out->format('H:i') : '-' }}</td>
                     <td>
@@ -72,7 +73,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" style="padding: 2rem;">この月の勤怠データはありません</td>
+                    <td colspan="6" class="empty-message">この月の勤怠データはありません</td>
                 </tr>
                 @endforelse
             </tbody>

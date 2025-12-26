@@ -21,8 +21,13 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                // 管理者と一般ユーザーでリダイレクト先を分岐
+                if (Auth::user()->is_admin) {
+                    return redirect('/admin/attendance/list');
+                }
+                return redirect('/attendance');
             }
+
         }
 
         return $next($request);
