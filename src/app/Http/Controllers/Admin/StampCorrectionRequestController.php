@@ -46,14 +46,19 @@ class StampCorrectionRequestController extends Controller
             $attendance->breaks()->delete();
             
             // 新しい休憩データを作成
-            if ($correctionRequest->breaks_data) {
-                foreach ($correctionRequest->breaks_data as $break) {
-                    $attendance->breaks()->create([
-                        'break_start' => $break['break_start'] ?? null,
-                        'break_end' => $break['break_end'] ?? null,
-                    ]);
-                }
-            }
+if ($correctionRequest->breaks_data) {
+    foreach ($correctionRequest->breaks_data as $break) {
+        // 空の休憩データはスキップ
+        if (empty($break['break_start']) && empty($break['break_end'])) {
+            continue;
+        }
+        
+        $attendance->breaks()->create([
+            'break_start' => $break['break_start'] ?? null,
+            'break_end' => $break['break_end'] ?? null,
+        ]);
+    }
+}
             
             // 申請のステータスを更新
             $correctionRequest->update([
@@ -62,8 +67,8 @@ class StampCorrectionRequestController extends Controller
                 'approved_at' => Carbon::now(),
             ]);
             
-            return redirect()->route('stamp_correction_request.index')
-                ->with('success', '申請を承認しました');
+            return redirect()->route('admin.stamp_correction_request.show', $correctionRequest->id)
+    ->with('success', '申請を承認しました');
                 
         } elseif ($action === 'reject') {
             // 却下

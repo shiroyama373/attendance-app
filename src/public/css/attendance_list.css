@@ -102,3 +102,39 @@
 .attendance-table tbody td:last-child {
     padding-right: 2rem;  /* 右端の余白 */
 }
+
+/* CSVボタン */
+.csv-container {
+    text-align: right;
+    margin-top: 2rem;
+    padding: 0;
+}
+
+.btn-csv {
+    display: inline-block;
+    padding: 0.6rem 2.5rem;
+    font-size: 1.3rem;
+    background: #000;
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.btn-csv:hover {
+    background: #333;
+}
+
+/* 戻るリンク */
+.back-link-container {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.back-link {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}

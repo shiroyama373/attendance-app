@@ -1,21 +1,35 @@
-/* スタッフ一覧ページ専用 */
-.staff-container {
-    max-width: 1000px;
+/* スタッフ一覧ページ */
+.request-wrapper {
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 2rem;
 }
 
-.staff-title {
+/* タイトル */
+.page-title {
+    font-size: 2rem;
+    margin-top: 5rem;
+    margin-bottom: 3rem;
     color: #000;
-    font-size: 1.25rem;
-    margin-bottom: 1.5rem;
 }
 
-.staff-table-container {
+.title-bar {
+    display: inline-block;
+    width: 6px;
+    height: 1.8rem;
+    background-color: #000;
+    margin-right: 0.8rem;
+    vertical-align: middle;
+}
+
+/* テーブルコンテナ */
+.table-container {
     background: white;
-    border-radius: 12px;
-    padding: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
+/* テーブル */
 .staff-table {
     width: 100%;
     border-collapse: collapse;
@@ -23,31 +37,38 @@
 
 .staff-table thead th {
     padding: 1rem;
-    text-align: left;
-    color: #999;
-    font-weight: normal;
-    border-bottom: 2px solid #ddd;
+    text-align: center;
+    color: #666;
+    font-weight: bold;
+    font-size: 1.125rem;
+    border-bottom: 3px solid #ddd;
 }
 
 .staff-table tbody td {
-    padding: 1rem;
-    color: #000;
-    border-bottom: 1px solid #eee;
-}
-
-.staff-table tbody tr:last-child td {
-    border-bottom: none;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.125rem;
+    border-bottom: 1.5px solid #ddd;
 }
 
 .staff-table tbody tr:hover {
     background-color: #f9f9f9;
 }
 
-.staff-link {
-    color: #0066cc;
+.detail-link {
+    color: #000;
     text-decoration: none;
+    font-weight: bold;
 }
 
-.staff-link:hover {
+.detail-link:hover {
     text-decoration: underline;
+}
+
+.empty-message {
+    text-align: center;
+    color: #999;
+    padding: 3rem;
 }

@@ -29,7 +29,7 @@
 .detail-row {
     display: flex;
     align-items: center;
-    padding: 2rem 6rem;
+    padding: 2.5rem 6rem;
     margin: 0 -6rem;
     border-bottom: 3px solid #eee;
 }
@@ -46,6 +46,7 @@
     flex: 1;
     font-size: 1.2rem;
     color: #444;
+    font-weight: bold;
 }
 
 .time-range {
@@ -111,4 +112,15 @@
     text-align: right;
     font-weight: bold;
     font-size: 1.2rem;  /* お好みのサイズに調整 */
+}
+
+/* 承認済みメッセージ */
+.approved-message {
+    padding: 0.8rem 2.5rem;
+    font-size: 1.5rem;
+    background: #666;
+    color: #fff;
+    border-radius: 4px;
+    display: inline-block;
+    text-align: center;
 }

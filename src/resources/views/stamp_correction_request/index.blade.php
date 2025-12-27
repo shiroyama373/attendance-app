@@ -39,7 +39,11 @@
                         <td>{{ Str::limit($request->note, 20) }}</td>
                         <td>{{ $request->created_at->format('Y/m/d') }}</td>
                         <td>
-                            <a href="{{ route('attendance.show', $request->attendance_id) }}" class="detail-link">詳細</a>
+                            @if(auth()->user()->is_admin)
+                                <a href="{{ route('admin.stamp_correction_request.show', $request->id) }}" class="detail-link">詳細</a>
+                            @else
+                                <a href="{{ route('attendance.show', $request->attendance_id) }}" class="detail-link">詳細</a>
+                            @endif
                         </td>
                     </tr>
                     @empty
@@ -67,7 +71,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($processedRequests as $request)
+                    @forelse($approvedRequests as $request)
                     <tr>
                         <td>{{ $request->status === 'approved' ? '承認済み' : '却下' }}</td>
                         <td>{{ $request->user->name }}</td>
@@ -75,7 +79,11 @@
                         <td>{{ Str::limit($request->note, 20) }}</td>
                         <td>{{ $request->created_at->format('Y/m/d') }}</td>
                         <td>
-                            <a href="{{ route('attendance.show', $request->attendance_id) }}" class="detail-link">詳細</a>
+                            @if(auth()->user()->is_admin)
+                                <a href="{{ route('admin.attendance.show', $request->attendance_id) }}" class="detail-link">詳細</a>
+                            @else
+                                <a href="{{ route('attendance.show', $request->attendance_id) }}" class="detail-link">詳細</a>
+                            @endif
                         </td>
                     </tr>
                     @empty

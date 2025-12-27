@@ -78,7 +78,11 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     
     // スタッフ別勤怠一覧画面
     Route::get('/attendance/staff/{id}', [AdminAttendanceController::class, 'showByStaff'])->name('admin.attendance.showByStaff');
+
+    // CSVエクスポート
+    Route::get('/attendance/export-csv/{id}', [AdminAttendanceController::class, 'exportCsv'])->name('admin.attendance.exportCsv');  // ← ここに追加
 });
+
 
 // 修正申請承認画面（管理者専用・/adminプレフィックスなし）
 Route::middleware(['auth', 'admin'])->group(function () {

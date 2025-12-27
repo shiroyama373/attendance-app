@@ -5,10 +5,12 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/admin_staff_index.css') }}">
 
-<div class="staff-container">
-    <h2 class="staff-title">スタッフ一覧</h2>
+<div class="request-wrapper">
+    <h2 class="page-title">
+        <span class="title-bar"></span>スタッフ一覧
+    </h2>
 
-    <div class="staff-table-container">
+    <div class="table-container">
         <table class="staff-table">
             <thead>
                 <tr>
@@ -18,15 +20,19 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($users as $user)
+                @forelse($users as $user)
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>
-                        <a href="{{ route('admin.attendance.showByStaff', $user->id) }}" class="staff-link">勤怠一覧</a>
+                        <a href="{{ route('admin.attendance.showByStaff', $user->id) }}" class="detail-link">詳細</a>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="3" class="empty-message">スタッフが登録されていません</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
