@@ -30,10 +30,10 @@
         <div class="detail-row">
             <div class="detail-label">出勤・退勤</div>
             <div class="detail-value">
-    {{ $request->clock_in ? $request->clock_in->format('H:i') : '-' }}
-    <span style="margin: 0 1rem;">〜</span>
-    {{ $request->clock_out ? $request->clock_out->format('H:i') : '-' }}
-</div>
+                {{ $request->clock_in ? $request->clock_in->format('H:i') : '-' }}
+                <span style="margin: 0 1rem;">〜</span>
+                {{ $request->clock_out ? $request->clock_out->format('H:i') : '-' }}
+            </div>
         </div>
 
         {{-- 休憩 --}}
@@ -53,12 +53,12 @@
                 </div>
 
                 <div class="detail-value">
-    {{ $break['break_start'] ?? '' }}
-    @if(!empty($break['break_start']) || !empty($break['break_end']))
-        <span style="margin: 0 1rem;">〜</span>
-    @endif
-    {{ $break['break_end'] ?? '' }}
-</div>
+                    {{ $break['break_start'] ?? '' }}
+                    @if(!empty($break['break_start']) || !empty($break['break_end']))
+                        <span style="margin: 0 1rem;">〜</span>
+                    @endif
+                    {{ $break['break_end'] ?? '' }}
+                </div>
             </div>
         @endfor
 
@@ -66,22 +66,22 @@
         <div class="detail-row">
             <div class="detail-label">備考</div>
             <div class="detail-value">
-    {{ $request->note }}
-</div>
+                {{ $request->note }}
+            </div>
         </div>
     </div>
 
     {{-- 承認ボタン または 承認済みメッセージ --}}
-<div class="btn-container">
-    @if($request->status === 'pending')
-        <form action="{{ route('admin.stamp_correction_request.approve', $request->id) }}" method="POST" style="display: inline;">
-            @csrf
-            <input type="hidden" name="action" value="approve">
-            <button type="submit" class="btn-edit">承認</button>
-        </form>
-    @else
-        <div class="approved-message">承認済み</div>
-    @endif
-</div>
+    <div class="btn-container">
+        @if($request->status === 'pending')
+            <form action="{{ route('admin.stamp_correction_request.approve', $request->id) }}" method="POST" style="display: inline;">
+                @csrf
+                <input type="hidden" name="action" value="approve">
+                <button type="submit" class="btn-edit">承認</button>
+            </form>
+        @else
+            <div class="approved-message">承認済み</div>
+        @endif
+    </div>
 </div>
 @endsection

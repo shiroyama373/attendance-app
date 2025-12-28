@@ -14,8 +14,8 @@ class StaffController extends Controller
     public function index()
     {
         // 全ユーザーを取得（一般・管理者含む）
-        $users = User::orderBy('name')->get();
-        
+        $users = User::where('is_admin', false)->get();
+
         return view('admin.staff.index', compact('users'));
     }
 }

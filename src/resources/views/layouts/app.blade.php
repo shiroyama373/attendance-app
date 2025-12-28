@@ -24,7 +24,7 @@
                 <a href="{{ route('attendance.list') }}">勤怠一覧</a>
                 <a href="{{ route('stamp_correction_request.index') }}">申請</a>
             @endif
-            
+
             {{-- ログアウトは共通 --}}
             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                 @csrf

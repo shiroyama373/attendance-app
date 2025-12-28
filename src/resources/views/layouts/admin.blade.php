@@ -9,7 +9,7 @@
 <body>
     <header class="header">
         <h1>COACHTECH</h1>
-        @auth  
+        @auth
         <nav>
             <a href="{{ route('admin.attendance.index') }}">勤怠一覧</a>
             <a href="{{ route('admin.staff.index') }}">スタッフ一覧</a>

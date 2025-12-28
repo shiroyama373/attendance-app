@@ -36,25 +36,25 @@
                 <div class="detail-value">
                     <div class="time-range">
                         <input type="text"
-       name="clock_in"
-       value="{{ old('clock_in', $attendance->clock_in ? $attendance->clock_in->format('H:i') : '') }}"
-       class="time-box"
-       placeholder="">
+                               name="clock_in"
+                               value="{{ old('clock_in', $attendance->clock_in ? $attendance->clock_in->format('H:i') : '') }}"
+                               class="time-box"
+                               placeholder="">
 
-<span>〜</span>
+                        <span>〜</span>
 
-<input type="text"
-       name="clock_out"
-       value="{{ old('clock_out', $attendance->clock_out ? $attendance->clock_out->format('H:i') : '') }}"
-       class="time-box"
-       placeholder="">
+                        <input type="text"
+                               name="clock_out"
+                               value="{{ old('clock_out', $attendance->clock_out ? $attendance->clock_out->format('H:i') : '') }}"
+                               class="time-box"
+                               placeholder="">
                     </div>
                     @error('clock_in')
-    <p class="error-message">{{ $message }}</p>
-@enderror
-@error('clock_out')
-    <p class="error-message">{{ $message }}</p>
-@enderror
+                        <p class="error-message">{{ $message }}</p>
+                    @enderror
+                    @error('clock_out')
+                        <p class="error-message">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
 
@@ -77,33 +77,33 @@
                     <div class="detail-value">
                         <div class="time-range">
                             <input type="text"
-       name="breaks_data[{{ $i }}][break_start]"
-       value="{{ old(
-           'breaks_data.'.$i.'.break_start',
-           $break && $break->break_start
-               ? \Carbon\Carbon::parse($break->break_start)->format('H:i')
-               : ''
-       ) }}"
-       class="time-box">
+                                   name="breaks_data[{{ $i }}][break_start]"
+                                   value="{{ old(
+                                       'breaks_data.'.$i.'.break_start',
+                                       $break && $break->break_start
+                                           ? \Carbon\Carbon::parse($break->break_start)->format('H:i')
+                                           : ''
+                                   ) }}"
+                                   class="time-box">
 
-<span>〜</span>
+                            <span>〜</span>
 
-<input type="text"
-       name="breaks_data[{{ $i }}][break_end]"
-       value="{{ old(
-           'breaks_data.'.$i.'.break_end',
-           $break && $break->break_end
-               ? \Carbon\Carbon::parse($break->break_end)->format('H:i')
-               : ''
-       ) }}"
-       class="time-box">
+                            <input type="text"
+                                   name="breaks_data[{{ $i }}][break_end]"
+                                   value="{{ old(
+                                       'breaks_data.'.$i.'.break_end',
+                                       $break && $break->break_end
+                                           ? \Carbon\Carbon::parse($break->break_end)->format('H:i')
+                                           : ''
+                                   ) }}"
+                                   class="time-box">
                         </div>
-@error('breaks_data.'.$i.'.break_start')
-    <p class="error-message">{{ $message }}</p>
-@enderror
-@error('breaks_data.'.$i.'.break_end')
-    <p class="error-message">{{ $message }}</p>
-@enderror
+                        @error('breaks_data.'.$i.'.break_start')
+                            <p class="error-message">{{ $message }}</p>
+                        @enderror
+                        @error('breaks_data.'.$i.'.break_end')
+                            <p class="error-message">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
             @endfor
@@ -114,9 +114,8 @@
                 <div class="detail-value">
                     <textarea name="note" class="note-box">{{ old('note', $attendance->note) }}</textarea>
                     @error('note')
-            <p class="error-message">{{ $message }}</p>
-        @enderror
-
+                        <p class="error-message">{{ $message }}</p>
+                    @enderror
                 </div>
             </div>
         </form>

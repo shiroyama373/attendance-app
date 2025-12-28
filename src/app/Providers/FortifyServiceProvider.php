@@ -41,7 +41,7 @@ class FortifyServiceProvider extends ServiceProvider
 
     // ビューの設定
     Fortify::loginView(function () {
-        if (request()->is('admin/login')) {
+        if (request()->path() === 'admin/login') {
             return view('admin.auth.login');
         }
         return view('auth.login');
