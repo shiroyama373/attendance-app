@@ -80,7 +80,7 @@
                         <td>{{ $request->created_at->format('Y/m/d') }}</td>
                         <td>
                             @if(auth()->user()->is_admin)
-                                <a href="{{ route('admin.attendance.show', $request->attendance_id) }}" class="detail-link">詳細</a>
+                                <a href="{{ route('admin.stamp_correction_request.show', $request->id) }}" class="detail-link">詳細</a>
                             @else
                                 <a href="{{ route('attendance.show', $request->attendance_id) }}" class="detail-link">詳細</a>
                             @endif
