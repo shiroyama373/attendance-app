@@ -30,6 +30,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    platform: linux/amd64
     container_name: phpmyadmin
     environment:
       PMA_HOST: db
@@ -39,6 +40,11 @@ services:
     depends_on:
       - db
 
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
 
 volumes:
   dbdata:

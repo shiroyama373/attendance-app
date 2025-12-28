@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Auth\Events\Verified;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -31,11 +32,15 @@ class FortifyServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
-    {
-           // ビューの設定
+   public function boot(): void
+{
+    // メール認証完了後のリダイレクト
+    Event::listen(Verified::class, function ($event) {
+        // 何もしない（Fortifyのデフォルト動作を使う）
+    });
+
+    // ビューの設定
     Fortify::loginView(function () {
-        // URLで一般ユーザーと管理者を判定
         if (request()->is('admin/login')) {
             return view('admin.auth.login');
         }
@@ -72,6 +77,12 @@ Fortify::authenticateUsing(function (Request $request) {
         return view('auth.register');
     });
 
+    // メール認証画面（追加）
+    Fortify::verifyEmailView(function () {
+        return view('auth.verify-email');
+    });
+
+
     Fortify::requestPasswordResetLinkView(function () {
         return view('auth.forgot-password');
     });
@@ -102,12 +113,12 @@ Fortify::authenticateUsing(function (Request $request) {
 });
 
 // ログイン後のリダイレクト先を分岐
-Fortify::redirects('login', function () {
-    if (auth()->user()->is_admin) {
-        return '/admin/attendance/list';
-    }
-    return '/attendance';
-});
+//Fortify::redirects('login', function () {
+//    if (auth()->user()->is_admin) {
+//        return '/admin/attendance/list';
+//    }
+//    return '/attendance';
+//});
 
 // ログアウトイベントをリッスン（クッキーにフラグを保存）
 Event::listen(Logout::class, function ($event) {

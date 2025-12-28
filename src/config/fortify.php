@@ -73,9 +73,7 @@ return [
     |
     */
 
-    'home' => function () {
-        return auth()->user()->is_admin ? '/admin/attendance/list' : '/attendance';
-    },
+    'home' => '/attendance',
 
     /*
     |--------------------------------------------------------------------------
@@ -148,7 +146,7 @@ return [
     'features' => [
         Features::registration(),
         Features::resetPasswords(),
-        // Features::emailVerification(),
+        Features::emailVerification(),
         //Features::updateProfileInformation(),
         //Features::updatePasswords(),
         //Features::twoFactorAuthentication([

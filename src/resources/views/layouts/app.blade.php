@@ -11,6 +11,8 @@
         <h1>COACHTECH</h1>
 
         @auth
+        @if(auth()->user()->email_verified_at)
+
         <nav>
             @if(request()->is('attendance') && session('is_clocked_out'))
                 {{-- 退勤後のナビゲーション --}}
@@ -29,6 +31,7 @@
                 <button type="submit">ログアウト</button>
             </form>
         </nav>
+        @endif
         @endauth
     </header>
 

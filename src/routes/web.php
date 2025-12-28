@@ -40,7 +40,7 @@ Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
 | 一般ユーザー用ルート（認証必須）
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','verified'])->group(function () {
     
     // 出勤登録画面
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
@@ -56,9 +56,18 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // 申請一覧画面（一般ユーザー・管理者共通）
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth','verified'])->group(function () {
     Route::get('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'index'])->name('stamp_correction_request.index');
 });
+
+// メール認証後のリダイレクト先（追加）
+Route::get('/home', function () {
+    if (auth()->user()->is_admin) {
+        return redirect('/admin/attendance/list');
+    }
+    return redirect('/attendance');
+})->middleware(['auth', 'verified'])->name('home');
+
 
 /*
 |--------------------------------------------------------------------------
