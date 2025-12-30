@@ -8,7 +8,7 @@
 <div class="auth-container">
     <h2 class="auth-title">管理者ログイン</h2>
 
-    <form action="{{ route('admin.login') }}" method="POST">
+    <form method="POST" action="/login" novalidate>
         @csrf
 
         <div class="form-group">

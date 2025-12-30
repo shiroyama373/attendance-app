@@ -32,65 +32,48 @@ class FortifyServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-   public function boot(): void
-{
-    // メール認証完了後のリダイレクト
-    Event::listen(Verified::class, function ($event) {
-        // 何もしない（Fortifyのデフォルト動作を使う）
-    });
+    public function boot(): void
+    {
+        // メール認証完了後のリダイレクト
+        Event::listen(Verified::class, function ($event) {
+            // 何もしない（Fortifyのデフォルト動作を使う）
+        });
 
-    // ビューの設定
-    Fortify::loginView(function () {
-        if (request()->path() === 'admin/login') {
-            return view('admin.auth.login');
-        }
-        return view('auth.login');
-    });
+        // ビューの設定
+        Fortify::loginView(function () {
+            if (request()->path() === 'admin/login') {
+                return view('admin.auth.login');
+            }
+            return view('auth.login');
+        });
 
-// 管理者ログインの認証処理
-Fortify::authenticateUsing(function (Request $request) {
-    $credentials = $request->only('email', 'password');
-    
-    if (Auth::attempt($credentials)) {
-        $user = Auth::user();
-        
-        // 管理者ログインページからのログイン
-        if ($request->path() === 'admin/login' && !$user->is_admin) {
-            Auth::logout();
-            return null;  // 一般ユーザーは管理者ログイン不可
-        }
-        
-        // 一般ユーザーログインページからのログイン
-        if ($request->path() !== 'admin/login' && $user->is_admin) {
-            Auth::logout();
-            return null;  // 管理者は一般ユーザーログイン不可
-        }
-        
-        return $user;  // それ以外は成功
-    }
-    
-    return null;
-});
+        // 認証処理（シンプル版）
+        Fortify::authenticateUsing(function (Request $request) {
+            $credentials = $request->only('email', 'password');
+            
+            if (Auth::attempt($credentials)) {
+                return Auth::user();
+            }
+            
+            return null;
+        });
 
+        Fortify::registerView(function () {
+            return view('auth.register');
+        });
 
-    Fortify::registerView(function () {
-        return view('auth.register');
-    });
+        // メール認証画面
+        Fortify::verifyEmailView(function () {
+            return view('auth.verify-email');
+        });
 
-    // メール認証画面（追加）
-    Fortify::verifyEmailView(function () {
-        return view('auth.verify-email');
-    });
+        Fortify::requestPasswordResetLinkView(function () {
+            return view('auth.forgot-password');
+        });
 
-
-    Fortify::requestPasswordResetLinkView(function () {
-        return view('auth.forgot-password');
-    });
-
-    Fortify::resetPasswordView(function ($request) {
-        return view('auth.reset-password', ['request' => $request]);
-    });
-
+        Fortify::resetPasswordView(function ($request) {
+            return view('auth.reset-password', ['request' => $request]);
+        });
 
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
@@ -108,24 +91,11 @@ Fortify::authenticateUsing(function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
 
-        RateLimiter::for('two-factor', function (Request $request) {
-    return Limit::perMinute(5)->by($request->session()->get('login.id'));
-});
-
-// ログイン後のリダイレクト先を分岐
-//Fortify::redirects('login', function () {
-//    if (auth()->user()->is_admin) {
-//        return '/admin/attendance/list';
-//    }
-//    return '/attendance';
-//});
-
-// ログアウトイベントをリッスン（クッキーにフラグを保存）
-Event::listen(Logout::class, function ($event) {
-    if ($event->user && $event->user->is_admin) {
-        Cookie::queue('was_admin', '1', 5); // 5分間有効
-    }
-});
-
+        // ログアウト時のクッキー設定
+        Event::listen(Logout::class, function ($event) {
+            if ($event->user && $event->user->is_admin) {
+                Cookie::queue('was_admin', '1', 5); // 5分間有効
+            }
+        });
     }
 }

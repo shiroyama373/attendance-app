@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use Illuminate\Support\Facades\Cookie;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\StampCorrectionRequestController;
 use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
@@ -15,11 +14,9 @@ use App\Http\Controllers\Admin\StampCorrectionRequestController as AdminStampCor
 |--------------------------------------------------------------------------
 */
 
-// 会員登録・ログイン（Fortifyが自動処理）
-// GET/POST /register - 会員登録
-// GET/POST /login - ログイン
-// POST /logout - ログアウト
-// ルートURL（ログアウト後のリダイレクト先）
+// 管理者ログイン
+// GET  /admin/login  - 管理者ログイン画面（自作）
+// POST /login        - Fortifyのログイン処理を利用
 Route::get('/', function () {
     if (request()->cookie('was_admin')) {
         Cookie::queue(Cookie::forget('was_admin'));
@@ -32,8 +29,6 @@ Route::get('/', function () {
 Route::get('/admin/login', function () {
     return view('admin.auth.login');
 })->name('admin.login');
-
-Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +93,3 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminStampCorrectionRequestController::class, 'show'])->name('admin.stamp_correction_request.show');
     Route::post('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminStampCorrectionRequestController::class, 'approve'])->name('admin.stamp_correction_request.approve');
 });
-
-// 管理者ログイン（Fortifyが自動処理）
-// GET/POST /admin/login - 管理者ログイン
