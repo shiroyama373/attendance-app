@@ -14,36 +14,30 @@
 ```bash
    docker-compose run --rm app composer install
 ```
-2. コンテナを再起動
+2. .env.exampleファイルを.envにコピー
 ```bash
-   docker-compose restart
+docker-compose exec app cp .env.example .env
 ```
-3. .env.exampleファイルを.envにコピー
+
+3. アプリケーションキーを生成
 ```bash
-   docker-compose exec app cp .env.example .env
+docker-compose exec app php artisan key:generate
 ```
-4. アプリケーションキーを生成
+
+4. マイグレーション実行
 ```bash
-   docker-compose exec app php artisan key:generate
+docker-compose exec app php artisan migrate
 ```
-5. マイグレーション実行
+※ データベースが存在しない場合、「Would you like to create it?」で **Yes** を選択
+
+5. シーダー実行
 ```bash
-   docker-compose exec app php artisan migrate
-```
-   ※ データベースが存在しない場合、「Would you like to create it?」で **Yes** を選択
-   
-6. シーダー実行
-```bash
-   docker-compose exec app php artisan db:seed
+docker-compose exec app php artisan db:seed
 ```
 
 ### 全ユーザーをメール認証済みにする
 ```bash
 docker-compose exec db mysql -u root -proot -D attendance_db -e "UPDATE users SET email_verified_at = NOW();"
-```
-### サーバー起動
-```bash
-docker-compose exec app php artisan serve --host=0.0.0.0 --port=8001
 ```
 
 ## 使用技術
@@ -62,9 +56,13 @@ docker-compose exec app php artisan serve --host=0.0.0.0 --port=8001
 
 ## テストアカウント
 ### 管理者
+- ログインURL: http://localhost:8001/admin/login
 - メール：admin@example.com
 - パスワード：password123
 
 ### 一般ユーザー
+- ログインURL: http://localhost:8001/login
 - メール：yamada@example.com
 - パスワード：password123
+
+※ 修正申請のサンプルデータ（承認待ち・承認済み）が含まれています
