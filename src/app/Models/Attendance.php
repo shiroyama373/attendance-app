@@ -14,6 +14,13 @@ class Attendance extends Model
      *
      * @var array
      */
+
+    const STATUS_NOT_STARTED = 'not_started';
+    const STATUS_CLOCKED_IN = 'clocked_in';
+    const STATUS_ON_BREAK = 'on_break';
+    const STATUS_CLOCKED_OUT = 'clocked_out';
+
+
     protected $fillable = [
         'user_id',
         'work_date',

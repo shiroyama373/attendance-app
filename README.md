@@ -12,8 +12,9 @@
 ### Laravel環境構築
 1. composer install を実行
 ```bash
-   docker-compose run --rm app composer install
+docker-compose run --rm app composer install
 ```
+
 2. .env.exampleファイルを.envにコピー
 ```bash
 docker-compose exec app cp .env.example .env
@@ -53,6 +54,25 @@ docker-compose exec db mysql -u root -proot -D attendance_db -e "UPDATE users SE
 ## ER図
 ![ER図](docs/er-diagram.png)
 
+## テスト
+
+### テストの実行
+全テストを実行：
+```bash
+docker-compose exec app php artisan test
+```
+
+特定のテストのみ実行：
+```bash
+docker-compose exec app php artisan test --filter=テスト名
+```
+
+### テストの内容
+- **基本機能テスト（ID 1-15）**: 会員登録、ログイン、勤怠打刻、管理者機能など
+- **応用機能テスト（ID 16）**: メール認証機能
+- **合計**: 63テスト、166アサーション
+
+※ Featureテストでは `RefreshDatabase` トレイトを使用しているため、テスト実行時にデータベースが自動的にリセットされます。シーダーのデータには依存していません。
 
 ## テストアカウント
 ### 管理者
@@ -65,4 +85,4 @@ docker-compose exec db mysql -u root -proot -D attendance_db -e "UPDATE users SE
 - メール：yamada@example.com
 - パスワード：password123
 
-※ 修正申請のサンプルデータ（承認待ち・承認済み）が含まれています
+※ db:seed を実行すると、画面確認用として修正申請のサンプルデータ（承認待ち・承認済み）が登録されます。

@@ -36,6 +36,7 @@ class StampCorrectionRequest extends Model
         'clock_out' => 'datetime',
         'breaks_data' => 'array',
         'approved_at' => 'datetime',
+        'breaks_data' => 'array',  
     ];
 
     /**

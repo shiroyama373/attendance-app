@@ -37,8 +37,8 @@
         </div>
 
         {{-- 休憩 --}}
-        @php
-            $breaks = $request->breaks_data ?? [];
+        @php 
+            $breaks = is_array($request->breaks_data) ? $request->breaks_data : [];
             $maxBreaks = max(count($breaks), 2);
         @endphp
 

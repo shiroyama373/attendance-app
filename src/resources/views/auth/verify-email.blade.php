@@ -14,7 +14,7 @@
         @endif
 
         <p style="margin-bottom: 1rem; font-size: 1.5rem; line-height: 1.5; font-weight: bold;">
-            登録していただいたメールアドレスに認証メールを送信しました。
+            登録していただいたメールアドレスに認証メールを送付しました。
         </p>
         <p style="margin-bottom: 2rem; font-size: 1.5rem; line-height: 1.5; font-weight: bold;">
             メール認証を完了してください。
@@ -31,7 +31,7 @@
         <form method="POST" action="{{ route('verification.send') }}" style="margin-top: 3rem;">
             @csrf
             <button type="submit" 
-                    style="background: none; border: none; color: #0066cc; cursor: pointer; text-decoration: underline; font-size: 1.3rem;">
+                    style="background: none; border: none; color: #0066cc; cursor: pointer; text-decoration: none; font-size: 1.3rem;">
                 認証メールを再送する
             </button>
         </form>

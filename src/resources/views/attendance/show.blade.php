@@ -49,12 +49,12 @@
                                class="time-box"
                                placeholder="">
                     </div>
-                    @error('clock_in')
-                        <p class="error-message">{{ $message }}</p>
-                    @enderror
-                    @error('clock_out')
-                        <p class="error-message">{{ $message }}</p>
-                    @enderror
+                    {{-- 出勤退勤エラー --}}
+                    @if ($errors->has('clock_in') || $errors->has('clock_out'))
+                        <p class="error-message">
+                            出勤時間もしくは退勤時間が不適切な値です
+                        </p>
+                    @endif
                 </div>
             </div>
 
@@ -64,7 +64,7 @@
                 $maxBreaks = max($breaks->count(), 2);
             @endphp
 
-            @for($i = 0; $i < $maxBreaks; $i++)
+            @for ($i = 0; $i < $maxBreaks; $i++)
                 @php
                     $break = $breaks[$i] ?? null;
                 @endphp
@@ -78,26 +78,17 @@
                         <div class="time-range">
                             <input type="text"
                                    name="breaks_data[{{ $i }}][break_start]"
-                                   value="{{ old(
-                                       'breaks_data.'.$i.'.break_start',
-                                       $break && $break->break_start
-                                           ? \Carbon\Carbon::parse($break->break_start)->format('H:i')
-                                           : ''
-                                   ) }}"
+                                   value="{{ old('breaks_data.'.$i.'.break_start', $break && $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '') }}"
                                    class="time-box">
 
                             <span>〜</span>
 
                             <input type="text"
                                    name="breaks_data[{{ $i }}][break_end]"
-                                   value="{{ old(
-                                       'breaks_data.'.$i.'.break_end',
-                                       $break && $break->break_end
-                                           ? \Carbon\Carbon::parse($break->break_end)->format('H:i')
-                                           : ''
-                                   ) }}"
+                                   value="{{ old('breaks_data.'.$i.'.break_end', $break && $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '') }}"
                                    class="time-box">
                         </div>
+                        {{-- 休憩エラー --}}
                         @error('breaks_data.'.$i.'.break_start')
                             <p class="error-message">{{ $message }}</p>
                         @enderror
