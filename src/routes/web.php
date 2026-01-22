@@ -35,7 +35,8 @@ Route::get('/admin/login', function () {
 | 一般ユーザー用ルート（認証必須）
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth','verified'])->group(function () {
+
+Route::middleware(['auth', 'verified', 'user'])->group(function () {  // ← 'user' を追加
     
     // 出勤登録画面
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');

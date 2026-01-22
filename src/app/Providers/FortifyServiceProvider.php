@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Validation\ValidationException;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -47,15 +50,34 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.login');
         });
 
-        // 認証処理（シンプル版）
+        // 認証処理(ログイン画面に応じて分岐)
         Fortify::authenticateUsing(function (Request $request) {
-            $credentials = $request->only('email', 'password');
-            
-            if (Auth::attempt($credentials)) {
-                return Auth::user();
+            $user = User::where('email', $request->email)->first();
+
+            // パスワードチェック
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return null;
             }
-            
-            return null;
+
+            // 管理者ログイン画面からのアクセスか判定
+            $referer = $request->headers->get('referer');
+            $isAdminLogin = $referer && str_contains($referer, '/admin/login');
+
+            // 管理者ログイン画面: 管理者のみ許可
+            if ($isAdminLogin && !$user->is_admin) {
+                throw ValidationException::withMessages([
+                    'email' => ['管理者アカウントでログインしてください。'],
+                ]);
+            }
+
+            // 一般ログイン画面: 一般ユーザーのみ許可
+            if (!$isAdminLogin && $user->is_admin) {
+                throw ValidationException::withMessages([
+                    'email' => ['一般ユーザーログイン画面(/login)をご利用ください。'],
+                ]);
+            }
+
+            return $user;
         });
 
         Fortify::registerView(function () {
