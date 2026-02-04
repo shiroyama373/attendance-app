@@ -53,7 +53,7 @@
                             $hours = floor($totalBreak / 60);
                             $minutes = $totalBreak % 60;
                         @endphp
-                        {{ sprintf('%02d:%02d', $hours, $minutes) }}
+                        {{ $totalBreak > 0 ? sprintf('%02d:%02d', $hours, $minutes) : '' }}
                     </td>
                     <td>
                         @if($attendance->clock_in && $attendance->clock_out)
