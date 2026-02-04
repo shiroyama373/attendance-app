@@ -37,8 +37,8 @@
                 @forelse($attendances as $attendance)
                 <tr>
                     <td>{{ $attendance->work_date->format('m/d') }}</td>
-                    <td>{{ $attendance->clock_in ? $attendance->clock_in->format('H:i') : '-' }}</td>
-                    <td>{{ $attendance->clock_out ? $attendance->clock_out->format('H:i') : '-' }}</td>
+                    <td>{{ $attendance->clock_in ? $attendance->clock_in->format('H:i') : '' }}</td>
+                    <td>{{ $attendance->clock_out ? $attendance->clock_out->format('H:i') : '' }}</td>
                     <td>
                         @php
                             $totalBreak = 0;
@@ -52,7 +52,7 @@
                             $hours = floor($totalBreak / 60);
                             $minutes = $totalBreak % 60;
                         @endphp
-                        {{ sprintf('%02d:%02d', $hours, $minutes) }}
+                        {{ $totalBreak > 0 ? sprintf('%02d:%02d', $hours, $minutes) : '' }}
                     </td>
                     <td>
                         @if($attendance->clock_in && $attendance->clock_out)
@@ -63,7 +63,7 @@
                             @endphp
                             {{ sprintf('%02d:%02d', $workHours, $workMins) }}
                         @else
-                            -
+
                         @endif
                     </td>
                     <td>
