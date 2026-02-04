@@ -169,7 +169,7 @@ class AttendanceController extends Controller
                 $workMinutes = $attendance->clock_out->diffInMinutes($attendance->clock_in) - $totalBreak;
                 $workHours   = floor($workMinutes / 60);
                 $workMins    = $workMinutes % 60;
-                $workTime    = sprintf('%02d:%02d', $workHours, $workMins);
+                $breakTime  = $totalBreak > 0 ? sprintf('%02d:%02d', $breakHours, $breakMins) : '';
             }
 
             $csvData .= "{$date},{$clockIn},{$clockOut},{$breakTime},{$workTime}\n";
