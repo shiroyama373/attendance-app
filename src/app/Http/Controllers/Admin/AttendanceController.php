@@ -161,7 +161,7 @@ class AttendanceController extends Controller
 
             $breakHours = floor($totalBreak / 60);
             $breakMins  = $totalBreak % 60;
-            $breakTime  = sprintf('%02d:%02d', $breakHours, $breakMins);
+            $breakTime  = $totalBreak > 0 ? sprintf('%02d:%02d', $breakHours, $breakMins) : '';
 
             // 勤務時間の計算
             $workTime = '';
@@ -169,7 +169,7 @@ class AttendanceController extends Controller
                 $workMinutes = $attendance->clock_out->diffInMinutes($attendance->clock_in) - $totalBreak;
                 $workHours   = floor($workMinutes / 60);
                 $workMins    = $workMinutes % 60;
-                $breakTime  = $totalBreak > 0 ? sprintf('%02d:%02d', $breakHours, $breakMins) : '';
+                $workTime    = sprintf('%02d:%02d', $workHours, $workMins);
             }
 
             $csvData .= "{$date},{$clockIn},{$clockOut},{$breakTime},{$workTime}\n";
