@@ -3,7 +3,7 @@
 @section('title', '勤怠詳細')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/attendance_show.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin_attendance_show.css') }}">
 
 <div class="attendance-wrapper">
 	<h2 class="page-title">
@@ -11,14 +11,6 @@
 	</h2>
 
 	<div class="detail-box">
-		{{-- 承認待ちメッセージ --}}
-		@if ($attendance->hasPendingRequest())
-			<div class="alert alert-warning"
-				style="background-color: #fff3cd; border: 1px solid #ffc107; padding: 12px; margin-bottom: 20px; border-radius: 4px; color: #856404;">
-				承認待ちのため修正はできません。
-			</div>
-		@endif
-
 		<form id="admin-update-form" action="{{ route('admin.attendance.update', $attendance->id) }}" method="POST">
 			@csrf
 			@method('PUT')
@@ -50,6 +42,8 @@
 							name="clock_in"
 							value="{{ old('clock_in', $attendance->clock_in ? $attendance->clock_in->format('H:i') : '') }}"
 							class="time-box"
+							placeholder=""
+							@if($attendance->hasPendingRequest()) disabled @endif
 						>
 
 						<span>〜</span>
@@ -59,6 +53,8 @@
 							name="clock_out"
 							value="{{ old('clock_out', $attendance->clock_out ? $attendance->clock_out->format('H:i') : '') }}"
 							class="time-box"
+							placeholder=""
+							@if($attendance->hasPendingRequest()) disabled @endif
 						>
 					</div>
 
@@ -102,6 +98,7 @@
 										: ''
 								) }}"
 								class="time-box"
+								@if($attendance->hasPendingRequest()) disabled @endif
 							>
 
 							<span>〜</span>
@@ -116,6 +113,7 @@
 										: ''
 								) }}"
 								class="time-box"
+								@if($attendance->hasPendingRequest()) disabled @endif
 							>
 						</div>
 
@@ -134,7 +132,7 @@
 			<div class="detail-row">
 				<div class="detail-label">備考</div>
 				<div class="detail-value">
-					<textarea name="note" class="note-box">{{ old('note', $attendance->note) }}</textarea>
+					<textarea name="note" class="note-box" @if($attendance->hasPendingRequest()) disabled @endif>{{ old('note', $attendance->note) }}</textarea>
 
 					@error('note')
 						<p class="error-message">{{ $message }}</p>
@@ -146,16 +144,11 @@
 
 	{{-- 修正ボタン --}}
 	<div class="btn-container">
-		<button
-			type="submit"
-			form="admin-update-form"
-			class="btn-edit"
-			@if ($attendance->hasPendingRequest())
-				disabled style="opacity: 0.5; cursor: not-allowed;"
-			@endif
-		>
-			修正
-		</button>
+		@if($attendance->hasPendingRequest())
+			<p class="pending-message">*承認待ちのため修正はできません。</p>
+		@else
+			<button type="submit" form="admin-update-form" class="btn-edit">修正</button>
+		@endif
 	</div>
 </div>
 @endsection
